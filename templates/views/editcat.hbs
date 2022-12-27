@@ -1,0 +1,37 @@
+{{>header}}
+<div class="row">
+ 
+    <div class="col-sm-12 col-md-6 p-3">
+      <div class="card">
+        <h5 class="card-header">Category</h5>
+        <div class="card-body">
+    <form method="post" action="/admin/categorySave">
+      
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          placeholder="Name"
+          value="{{category.name}}"
+        />
+        <input type="hidden" id="catid" name="catid" value="{{category._id}}"/>
+      </div>
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Edit category</button>
+      </div>
+      
+    </form>
+
+ </div>
+      </div>
+      <!--end of card -->
+    </div>
+
+   
+  
+</div>
+
+{{>footer}}

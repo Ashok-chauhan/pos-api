@@ -1,0 +1,47 @@
+{{>header}}
+<div class="row">
+ 
+    <div class="col-sm-12 col-md-6 p-3">
+      <div class="card">
+        <h5 class="card-header">Category</h5>
+        <div class="card-body">
+    <form method="post" action="/admin/category">
+      
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          placeholder="Name"
+        />
+      </div>
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Create category</button>
+      </div>
+      
+    </form>
+
+ </div>
+      </div>
+      <!--end of card -->
+    </div>
+
+    <div class="col-sm-12 col-md-6 p-3">
+      <table class="table table-success table-striped ">
+      {{#each categories}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td><a href="/admin/delcat/{{this._id}}">Delete</a></td>
+        <td><a href="/admin/editcat/{{this._id}}">Edit</a></td>
+      </tr>
+      
+      {{/each}}
+      </table>
+      
+    </div>
+  
+</div>
+
+{{>footer}}

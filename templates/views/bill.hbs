@@ -1,0 +1,94 @@
+{{>header}}
+
+<div class="row">
+
+  <div class="col-sm-12 col-md-6 p-3">
+    <form  id="bill-form" method="post" action="/bill"> 
+      <div class="card">
+        <h5 class="card-header">Categories</h5>
+        <div class="card-body">
+
+
+          <div class="row">
+            {{#each category}}
+            <div class="cat">
+            <label class="category">
+            <input  type="radio" name="category" value="{{this.name}}"> {{this.name}}
+            </label>
+            </div>
+            
+            {{/each}}
+          
+          </div>
+
+
+          </div>
+      </div>
+  </div>
+
+
+  {{!-- <center> --}}
+    <div class="col-sm-12 col-md-6 p-3">
+      <div class="card">
+        <h5 class="card-header">POS</h5>
+        <div class="card-body">
+    {{!-- <form  id="bill-form"> --}}
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          id="phone"
+          name="phone"
+          placeholder="Phone No."
+          aria-describedby="phone"
+        />
+
+      </div>
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          placeholder="Name"
+        />
+      </div>
+
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          id="amount"
+          name="amount"
+          placeholder="Amount"
+        />
+      </div>
+
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          id="discount"
+          name="discount"
+          placeholder="discount"
+        />
+      </div>
+
+      {{!-- <button type="submit" class="btn btn-primary" onclick="createCustomer();">Submit</button> --}}
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+    </form>
+
+ </div>
+      </div>
+      <!--end of card -->
+    </div>
+  {{!-- </center> --}}
+</div>
+
+{{>footer}}
