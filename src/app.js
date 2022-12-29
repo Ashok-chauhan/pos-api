@@ -22,6 +22,6 @@ app.use("/api/v1", products);
 app.use("/api/v1", sell);
 app.use("/api/v1/customer", customers);
 
-app.listen(3000, "127.0.0.1", () => {
-  console.log("listening on port 3000");
+app.listen(5000, "127.0.0.1", () => {
+  console.log("listening on port 5000");
 });
