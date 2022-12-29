@@ -7,25 +7,14 @@ const router = express.Router();
 
 require("../db/mongoose");
 const Customer = require("../models/customers");
+const Sell = require("../models/sell");
 const Category = require("../models/category");
+// Middleware
+const { protect } = require("../middleware/auth");
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-var session;
-router.get("", (req, res) => {
-  res.render("login");
-});
-router.get("/bill", async (req, res) => {
-  session = req.session;
-
-  if (!session.is_pos) {
-    return res.render("login", { error: "error" });
-  }
-  const category = await Category.find({});
-
-  res.render("bill", { category });
-});
 router.get("/thanks/:phone?", (req, res) => {
   // var twilio = require("twilio");
   // const accountSid = "AC18727d75891aa70b1f3f95a4c4b654cc";
@@ -50,23 +39,26 @@ router.get("/thanks/:phone?", (req, res) => {
   res.render("thanks");
 });
 
-router.post("/bill", (req, res) => {
-  let total_amount;
+router.post("/bill", protect, async (req, res) => {
+  const customer = await Customer.findOne({ phone: req.body.customer_phone });
+
+  req.body.customer_id = customer._id;
+  req.body.customer_name = customer.name;
+  req.body.pos_id = req.user.id;
+  let net_amount;
   if (req.body.discount) {
-    total_amount = req.body.amount - req.body.discount;
+    net_amount = req.body.amount - req.body.discount;
   } else {
-    total_amount = req.body.amount;
+    net_amount = req.body.amount;
   }
-  // console.log(total_amount);
 
-  req.body.total_amount = total_amount;
-  const customer = new Customer(req.body);
+  req.body.net_amount = net_amount;
+  const sell = new Sell(req.body);
 
-  customer
+  sell
     .save()
     .then(() => {
-      // res.send(customer);
-      res.redirect("/thanks/" + req.body.phone);
+      res.status(200).json({ success: true });
     })
     .catch((err) => {
       res.status(400).send(err);

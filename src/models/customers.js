@@ -3,21 +3,18 @@ const mongoose = require("mongoose");
 const Customer = mongoose.model("Customer", {
   phone: {
     type: Number,
+    trim: true,
   },
   name: {
     type: String,
+    trim: true,
   },
-  amount: {
-    type: Number,
-    required: true,
-  },
-  particular: { type: String },
-  discount: { type: Number, default: 0 },
-  total_amount: { type: Number },
-  tax: { type: Number },
-  invoice_number: { type: Number },
+  pos_id: { type: String, trim: true, required: true },
+  email: { type: String },
+  address: { type: String, default: "" },
+  city: { type: String },
+  pincode: { type: Number },
   date: { type: Date, default: Date.now() },
-  category: { type: String },
 });
 
 module.exports = Customer;

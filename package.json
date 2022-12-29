@@ -5,10 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "",
-    "dev": "nodemon src/app.js -e .js, .hbs"
+    "dev": "nodemon src/app.js -e .js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ashok kumar chauhan",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -16,8 +16,8 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "hbs": "^4.2.0",
+    
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.11.0",
     "mongoose": "^6.7.2",
     "twilio": "^3.83.3"

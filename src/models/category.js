@@ -7,6 +7,11 @@ const Category = mongoose.model("Category", {
     required: true,
     trim: true,
   },
+  user_email: {
+    type: String,
+    required: true,
+    trim: true,
+  },
 });
 
 module.exports = Category;
