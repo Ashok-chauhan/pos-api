@@ -7,7 +7,12 @@ const Category = mongoose.model("Category", {
     required: true,
     trim: true,
   },
-  user_email: {
+  pos_email: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  pos_id: {
     type: String,
     required: true,
     trim: true,

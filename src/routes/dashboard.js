@@ -8,6 +8,8 @@ const router = express.Router();
 require("../db/mongoose");
 const Category = require("../models/category");
 const User = require("../models/users");
+// Middleware
+const { protect } = require("../middleware/auth");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -16,26 +18,27 @@ const { createCipheriv } = require("crypto");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get("/category", async (req, res) => {
+router.get("/category", protect, async (req, res) => {
   try {
-    //const cats = await Category.find({ user_email: "ashok@ashok.com" }); validateion token
-    const cats = await Category.find({});
-    res.send(cats);
-    //res.render("category", { categories: cats });
+    const cats = await Category.find({ pos_id: req.user.id });
+    res
+      .status(200)
+      .json({ success: true, count: cats.length, categories: cats });
   } catch (error) {
-    console.log("invalid category"); // Handle error
     res.status(400).send(error);
   }
 });
 
-router.post("/category", (req, res) => {
+router.post("/category", protect, (req, res) => {
   console.log(req.body);
+  req.body.pos_email = req.user.email;
+  req.body.pos_id = req.user.id;
 
   const category = new Category(req.body);
   category
     .save()
     .then(() => {
-      res.send(category);
+      res.status(201).json({ success: true });
     })
     .catch((err) => {
       res.status(400).send(err);
