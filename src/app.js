@@ -1,7 +1,6 @@
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const hbs = require("hbs");
 require("./db/mongoose");
 const cookieParser = require("cookie-parser");
 // load route
