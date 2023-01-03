@@ -8,6 +8,7 @@ const dashboard = require("./routes/dashboard");
 const sell = require("./routes/sell");
 const products = require("./routes/products");
 const customers = require("./routes/customer");
+const cors = require("cors");
 
 const app = express();
 const publicDirectory = path.join(__dirname, "../public");
@@ -15,6 +16,7 @@ app.use(express.static(publicDirectory));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/api/v1", dashboard);
 app.use("/api/v1", products);
