@@ -65,4 +65,116 @@ router.post("/bill", protect, async (req, res) => {
     });
 });
 
+router.post("/salebyDate", async (req, res) => {
+  const weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let currentDate;
+  if (!req.body.date) {
+    const dt = new Date();
+    currentDate =
+      dt.getFullYear() + "-" + parseInt(dt.getMonth() + 1) + "-" + dt.getDate();
+  }
+  if (req.body.date) {
+    currentDate = req.body.date;
+  }
+
+  // Current day query.
+  const currentDateEarning = await Sell.aggregate([
+    {
+      $addFields: {
+        onlyDate: {
+          $dateToString: {
+            format: "%Y-%m-%d",
+            date: "$date",
+          },
+        },
+      },
+    },
+    {
+      $match: {
+        onlyDate: {
+          $eq: currentDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { date: currentDate },
+        totalEarning: { $sum: "$net_amount" },
+        amount: { $sum: "$amount" },
+        count: { $sum: 1 },
+        discount: { $sum: "$discount" },
+      },
+    },
+  ]);
+
+  // Previous Week Day query.
+
+  const dt = new Date(req.body.date);
+  dt.setDate(dt.getDate() - 7);
+  let prevWeekDay =
+    dt.getFullYear() + "-" + Number(dt.getMonth() + 1) + "-" + dt.getDate();
+  const prevWeekEarning = await Sell.aggregate([
+    {
+      $addFields: {
+        onlyDate: {
+          $dateToString: {
+            format: "%Y-%m-%d",
+            date: "$date",
+          },
+        },
+      },
+    },
+    {
+      $match: {
+        onlyDate: {
+          $eq: prevWeekDay,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { date: prevWeekDay },
+        totalEarning: { $sum: "$net_amount" },
+        amount: { $sum: "$amount" },
+        count: { $sum: 1 },
+        discount: { $sum: "$discount" },
+      },
+    },
+  ]);
+
+  const dataobj = {};
+  const data = currentDateEarning.map((earnings) => {
+    dataobj.net_sales = earnings.totalEarning;
+    dataobj.gross_sales = earnings.amount;
+    dataobj.average_sale = earnings.amount / earnings.count;
+    dataobj.transactions = earnings.count;
+    dataobj.date = earnings._id.date;
+    dataobj.prevWday = weekday[dt.getDay()];
+    dataobj.prevDay = dt.getDate();
+  });
+
+  const prevWeekobj = {};
+  prevWeekEarning.map((prevWeek) => {
+    prevWeekobj.net_sales = prevWeek.totalEarning;
+    prevWeekobj.gross_sales = prevWeek.amount;
+    prevWeekobj.average_sale = prevWeek.amount / prevWeek.count;
+    prevWeekobj.transactions = prevWeek.count;
+    prevWeekobj.date = prevWeek._id.date;
+  });
+
+  res.status(200).json({
+    success: true,
+    toDayEarning: dataobj,
+    previousWeekDay: prevWeekobj,
+  });
+});
+
 module.exports = router;
