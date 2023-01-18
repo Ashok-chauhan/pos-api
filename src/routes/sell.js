@@ -156,6 +156,7 @@ router.post("/salebyDate", async (req, res) => {
     dataobj.gross_sales = earnings.amount;
     dataobj.average_sale = earnings.amount / earnings.count;
     dataobj.transactions = earnings.count;
+    dataobj.discount = earnings.discount;
     dataobj.date = earnings._id.date;
     dataobj.prevWday = weekday[dt.getDay()];
     dataobj.prevDay = dt.getDate();
@@ -167,6 +168,7 @@ router.post("/salebyDate", async (req, res) => {
     prevWeekobj.gross_sales = prevWeek.amount;
     prevWeekobj.average_sale = prevWeek.amount / prevWeek.count;
     prevWeekobj.transactions = prevWeek.count;
+    prevWeekobj.discount = prevWeek.discount;
     prevWeekobj.date = prevWeek._id.date;
   });
 
