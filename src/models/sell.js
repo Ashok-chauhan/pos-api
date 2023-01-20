@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const Sell = mongoose.model("Sell", {
-  date: { type: Date, default: Date.now() },
+  //date: { type: Date, default: Date.now() },
+  date: { type: Date, default: Date.now },
   product_name: {
     type: String,
     required: true,
