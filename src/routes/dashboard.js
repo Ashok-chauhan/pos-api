@@ -14,6 +14,7 @@ const { protect } = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { createCipheriv } = require("crypto");
+const Sell = require("../models/sell");
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -171,6 +172,41 @@ router.post("/clients", (req, res) => {
       return res.send(error);
     }
     res.redirect("/admin/clients");
+  });
+});
+
+router.post("/paymentMode", protect, async (req, res) => {
+  const mode = req.body.mode;
+  const todayDate = req.body.date;
+
+  const paymentMode = await Sell.aggregate([
+    {
+      $addFields: {
+        onlyDate: {
+          $dateToString: {
+            format: "%Y-%m-%d",
+            date: "$date",
+          },
+        },
+      },
+    },
+    {
+      $match: { onlyDate: { $eq: todayDate }, payment_mode: mode },
+    },
+    {
+      $group: {
+        _id: { date: todayDate },
+        totalEarning: { $sum: "$net_amount" },
+        amount: { $sum: "$amount" },
+        count: { $sum: 1 },
+        discount: { $sum: "$discount" },
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    success: true,
+    paymentMode,
   });
 });
 

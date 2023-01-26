@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/api/v1", dashboard);
+app.use("/api/v1/dashboard", dashboard);
 app.use("/api/v1", products);
 app.use("/api/v1", sell);
 app.use("/api/v1/customer", customers);

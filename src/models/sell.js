@@ -34,6 +34,12 @@ const Sell = mongoose.model("Sell", {
     required: true,
     trim: true,
   },
+  payment_mode: {
+    type: String,
+    required: true,
+    trim: true,
+    default: "cash",
+  },
 });
 
 module.exports = Sell;
