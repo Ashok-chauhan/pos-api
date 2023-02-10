@@ -21,7 +21,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 //get all products
 router.get("/product", protect, async (req, res) => {
   try {
-    const prodcuts = await Product.find({});
+    const user_id = req.user.id;
+    const prodcuts = await Product.find({ user_id: user_id });
     return res.send(prodcuts);
   } catch (e) {
     res.status(404).send(e.message);
@@ -38,19 +39,21 @@ router.get("/product/:catid", async (req, res) => {
     res.status(404).send(e.message);
   }
 });
-
+//careting product
 router.post("/product", protect, (req, res) => {
+  req.body.user_email = req.user.email;
+  req.body.user_id = req.user.id;
   const product = new Product(req.body);
   product
     .save()
     .then(() => {
-      res.status(201).send(product);
+      res.status(201).json({ success: "ture", product });
     })
     .catch((err) => {
-      res.status(400).send(err);
+      res.status(400).json({ success: "fales", err });
     });
 });
-
+//editing product
 router.put("/product", protect, async (req, res) => {
   const cname = req.body.name;
   const id = req.body.id;
@@ -65,7 +68,7 @@ router.put("/product", protect, async (req, res) => {
 router.delete("/product", protect, async (req, res) => {
   try {
     await Product.deleteOne({ _id: req.body.id });
-    return res.status(200).json({ result: "success" });
+    return res.status(200).json({ result: "true" });
   } catch (error) {
     return res.status(400).send(error);
   }

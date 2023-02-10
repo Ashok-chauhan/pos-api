@@ -13,14 +13,24 @@ const { protect } = require("../middleware/auth");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.post("/check", async (req, res) => {
-  console.log(req.body.phone + "###");
-  const customer = await Customer.findOne({ phone: req.body.phone });
+router.post("/check", protect, async (req, res) => {
+  const customer = await Customer.findOne({
+    phone: req.body.phone,
+    pos_id: req.user.id,
+  });
   if (!customer) {
     return res.status(200).json({ success: false });
   } else {
     return res.status(200).json({ success: true, customer });
   }
+});
+
+router.get("/customerCount", protect, async (req, res) => {
+  const customerCount = await Customer.find({ pos_id: req.user.id });
+  if (!customerCount) {
+    return res.status(200).json({ success: false });
+  }
+  return res.status(200).json({ success: true, count: customerCount.length });
 });
 
 router.post("/add", protect, async (req, res) => {
