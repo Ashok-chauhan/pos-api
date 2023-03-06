@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const Sell = mongoose.model("Sell", {
   //date: { type: Date, default: Date.now() },
   date: { type: Date, default: Date.now },
+  products: [{ name: String, default: "" }],
   product_name: {
     type: String,
-    required: true,
+    //required: true,
     trim: true,
   },
   pos_id: {

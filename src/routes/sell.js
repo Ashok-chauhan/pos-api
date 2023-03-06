@@ -41,7 +41,7 @@ router.get("/thanks/:phone?", (req, res) => {
 
 router.post("/bill", protect, async (req, res) => {
   const customer = await Customer.findOne({ phone: req.body.customer_phone });
-
+  console.log(req.body);
   req.body.customer_id = customer._id;
   req.body.customer_name = customer.name;
   req.body.pos_id = req.user.id;
